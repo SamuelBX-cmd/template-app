@@ -6,25 +6,29 @@ on:
 permissions:
   contents: read
 jobs:
-  python:
-    if: hashFiles('requirements.txt') != ''
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      # Python projects (requirements.txt)
+      - if: hashFiles('requirements.txt') != ''
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - run: ruff check .
-      - run: ruff format --check .
-      - run: pytest
-  node:
-    if: hashFiles('package.json') != ''
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - if: hashFiles('requirements.txt') != ''
+        run: pip install -r requirements.txt
+      - if: hashFiles('requirements.txt') != ''
+        run: ruff check .
+      - if: hashFiles('requirements.txt') != ''
+        run: ruff format --check .
+      - if: hashFiles('requirements.txt') != ''
+        run: pytest
+      # Node projects (package.json)
+      - if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      - run: npm ci
-      - run: npm test --if-present
+      - if: hashFiles('package.json') != ''
+        run: npm ci
+      - if: hashFiles('package.json') != ''
+        run: npm test --if-present
